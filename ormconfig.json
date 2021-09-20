@@ -1,0 +1,13 @@
+{
+  "type": "mysql",
+  "host": "localhost",
+  "port":5432,
+  "database": "db_booklist",
+  "username": "root",
+  "password": "",
+  "migrations": ["./src/database/migrations/*.ts"],
+  "entities": ["./src/database/modules/**/*.ts"],
+  "cli": {
+    "migrationsDir": ["./src/database/migrations"]
+  }
+}

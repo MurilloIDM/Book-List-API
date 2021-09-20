@@ -4,7 +4,7 @@ API para gerenciamento de livros lidos e livros dos quais você possui interesse
 
 ## Tecnologias
 
-- Node,js - Acessar [Documentação](https://nodejs.org/en/)
+- Node.js - Acessar [Documentação](https://nodejs.org/en/)
 - Express - Acessar [Documentação](https://expressjs.com/pt-br/)
 - MySQL - Acessar [Documentação](https://www.mysql.com/)
 
