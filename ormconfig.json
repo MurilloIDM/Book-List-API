@@ -1,13 +1,13 @@
 {
-  "type": "mysql",
+  "type": "postgres",
   "host": "localhost",
-  "port":5432,
-  "database": "db_booklist",
-  "username": "root",
-  "password": "",
+  "port": 3306,
+  "database": "postgres",
+  "username": "postgres",
+  "password": "toor",
   "migrations": ["./src/database/migrations/*.ts"],
-  "entities": ["./src/database/modules/**/*.ts"],
+  "entities": ["./src/modules/**/entities/*.ts"],
   "cli": {
-    "migrationsDir": ["./src/database/migrations"]
+    "migrationsDir": "./src/database/migrations"
   }
 }
