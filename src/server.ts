@@ -1,5 +1,5 @@
 import express from "express";
-import "./shared/containers";
+import "@shared/containers";
 
 const app = express();
 

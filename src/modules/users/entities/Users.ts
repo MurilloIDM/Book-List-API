@@ -27,8 +27,8 @@ class Users {
   @Column()
   admin: boolean;
 
-  @Column()
-  birthDate: Date;
+  @Column({ type: "date" })
+  birthDate: string;
 
   @ManyToMany(() => Books)
   @JoinTable()
