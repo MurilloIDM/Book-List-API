@@ -33,6 +33,11 @@ class UsersRepository implements IUsersRepository {
     return entity;
   }
 
+  async findByEmail(email: string): Promise<Users> {
+    const entity = await this.repository.findOne({ email });
+    return entity;
+  }
+
   async delete(id: string): Promise<void> {
     await this.repository.delete({ id });
   }

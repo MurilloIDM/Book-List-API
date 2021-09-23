@@ -1,7 +1,7 @@
-import { IRequestBooks } from "@modules/books/dtos/IRequestBooks";
-import { Books } from "@modules/books/entities/Books";
 import { getRepository, Repository } from "typeorm";
 
+import { IRequestBooks } from "../../dtos/IRequestBooks";
+import { Books } from "../../entities/Books";
 import { IBooksRepository } from "../IBooksRepository";
 
 class BooksRepository implements IBooksRepository {
