@@ -1,7 +1,7 @@
 import { IRequestUsers } from "../dtos/IRequestUsers";
 import { Users } from "../entities/Users";
 
-interface IUsersRepositories {
+interface IUsersRepository {
   update(data: IRequestUsers, user: Users): Promise<Users>;
   create(data: IRequestUsers): Promise<void>;
   findById(id: string): Promise<Users>;
@@ -9,4 +9,4 @@ interface IUsersRepositories {
   findAll(): Promise<Users[]>;
 }
 
-export { IUsersRepositories };
+export { IUsersRepository };
