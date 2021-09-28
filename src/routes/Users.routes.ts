@@ -2,6 +2,7 @@ import { Router } from "express";
 import { check } from "express-validator";
 
 import { CreateUserController } from "../modules/users/useCases/createUser/CreateUserController";
+import { DeleteUserController } from "../modules/users/useCases/deleteUser/DeleteUserController";
 import { FindAllUsersController } from "../modules/users/useCases/findAllUsers/FIndAllUsersController";
 import { FindByIdUserController } from "../modules/users/useCases/findById/FindByIdUserController";
 
@@ -10,6 +11,7 @@ const usersRouter = Router();
 const createUserController = new CreateUserController();
 const findAllUsersController = new FindAllUsersController();
 const findByIdUserController = new FindByIdUserController();
+const deleteUserController = new DeleteUserController();
 
 usersRouter.post(
   "/",
@@ -23,5 +25,7 @@ usersRouter.post(
 usersRouter.get("/", findAllUsersController.handle);
 
 usersRouter.get("/:id", findByIdUserController.handle);
+
+usersRouter.delete("/:id", deleteUserController.handle);
 
 export { usersRouter };

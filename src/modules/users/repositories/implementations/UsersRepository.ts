@@ -1,3 +1,4 @@
+import { forEach, get } from "lodash";
 import { getRepository, Repository } from "typeorm";
 
 import { IRequestUsers } from "../../dtos/IRequestUsers";
@@ -29,7 +30,13 @@ class UsersRepository implements IUsersRepository {
   }
 
   async findById(id: string): Promise<Users> {
-    const entity = await this.repository.findOne(id);
+    const entity = await this.repository
+      .createQueryBuilder("users")
+      .leftJoinAndSelect("users.readBooks", "readBooks")
+      .leftJoinAndSelect("users.booksInterest", "booksInterest")
+      .where("users.id = :id", { id })
+      .getOne();
+
     return entity;
   }
 
@@ -38,12 +45,40 @@ class UsersRepository implements IUsersRepository {
     return entity;
   }
 
-  async delete(id: string): Promise<void> {
-    await this.repository.delete({ id });
+  async delete(id: string, user: Users): Promise<void> {
+    const readBooks = get(user, "readBooks", []);
+    const booksInterest = get(user, "booksInterest", []);
+
+    forEach(readBooks, async (book) => {
+      await this.repository
+        .createQueryBuilder("users")
+        .relation("readBooks")
+        .of(id)
+        .remove(book.id);
+    });
+
+    forEach(booksInterest, async (book) => {
+      await this.repository
+        .createQueryBuilder("users")
+        .relation("booksInterest")
+        .of(id)
+        .remove(book.id);
+    });
+
+    await this.repository
+      .createQueryBuilder("users")
+      .delete()
+      .where("id = :id", { id })
+      .execute();
   }
 
   async findAll(): Promise<Users[]> {
-    const users = await this.repository.find();
+    const users = await this.repository
+      .createQueryBuilder("users")
+      .leftJoinAndSelect("users.readBooks", "readBooks")
+      .leftJoinAndSelect("users.booksInterest", "booksInterest")
+      .getMany();
+
     return users;
   }
 }
