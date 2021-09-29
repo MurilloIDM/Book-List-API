@@ -1,12 +1,14 @@
 import { Router } from "express";
-import { check } from "express-validator";
+import { check, param } from "express-validator";
 
 import { CreateBookController } from "../modules/books/useCases/createBook/CreateBookController";
 import { FindAllBooksController } from "../modules/books/useCases/findAllBooks/FindAllBooksController";
+import { FindByIdBookController } from "../modules/books/useCases/findByIdBook/FindByIdBookController";
 
 const booksRouter = Router();
 
 const createBookController = new CreateBookController();
+const findByIdBookController = new FindByIdBookController();
 const findAllBooksController = new FindAllBooksController();
 
 booksRouter.post(
@@ -24,5 +26,11 @@ booksRouter.post(
 );
 
 booksRouter.get("/", findAllBooksController.handle);
+
+booksRouter.get(
+  "/:id",
+  param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
+  findByIdBookController.handle
+);
 
 export { booksRouter };
