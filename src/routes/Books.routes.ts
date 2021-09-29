@@ -2,10 +2,12 @@ import { Router } from "express";
 import { check } from "express-validator";
 
 import { CreateBookController } from "../modules/books/useCases/createBook/CreateBookController";
+import { FindAllBooksController } from "../modules/books/useCases/findAllBooks/FindAllBooksController";
 
 const booksRouter = Router();
 
 const createBookController = new CreateBookController();
+const findAllBooksController = new FindAllBooksController();
 
 booksRouter.post(
   "/",
@@ -20,3 +22,7 @@ booksRouter.post(
     .withMessage("Campo [publishingCompany] é obrigatório!"),
   createBookController.handle
 );
+
+booksRouter.get("/", findAllBooksController.handle);
+
+export { booksRouter };
