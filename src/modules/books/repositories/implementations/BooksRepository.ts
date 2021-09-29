@@ -33,8 +33,18 @@ class BooksRepository implements IBooksRepository {
     return bookUpdated;
   }
 
-  async findByName(name: string): Promise<Books> {
-    const book = this.repository.findOne({ name });
+  async findByNameAndCompany(
+    name: string,
+    author: string,
+    company: string
+  ): Promise<Books> {
+    const book = this.repository
+      .createQueryBuilder("books")
+      .where("name = :name", { name })
+      .andWhere("author = :author", { author })
+      .andWhere("publishingCompany = :company", { company })
+      .execute();
+
     return book;
   }
 
