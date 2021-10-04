@@ -1,24 +1,25 @@
 import { inject, injectable } from "tsyringe";
 
 import { HttpException } from "../../../../errors/HttpException";
+import { IRequestBooks } from "../../dtos/IRequestBooks";
 import { IBooksRepository } from "../../repositories/IBooksRepository";
 
 @injectable()
-class DeleteBookUseCase {
+class UpdateBookUseCase {
   constructor(
     @inject("BooksRepository")
     private booksRepository: IBooksRepository
   ) {}
 
-  async execute(id: string): Promise<void> {
-    const findAlreadyExists = this.booksRepository.findById(id);
+  async execute(data: IRequestBooks, id: string): Promise<void> {
+    const bookAlreadyExists = await this.booksRepository.findById(id);
 
-    if (!findAlreadyExists) {
+    if (!bookAlreadyExists) {
       throw new HttpException("Livro não encontrado com [id] informado!", 404);
     }
 
-    await this.booksRepository.delete(id);
+    await this.booksRepository.update(data, bookAlreadyExists);
   }
 }
 
-export { DeleteBookUseCase };
+export { UpdateBookUseCase };
