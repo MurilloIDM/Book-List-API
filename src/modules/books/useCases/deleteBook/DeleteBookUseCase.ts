@@ -11,13 +11,13 @@ class DeleteBookUseCase {
   ) {}
 
   async execute(id: string): Promise<void> {
-    const findAlreadyExists = this.booksRepository.findById(id);
+    const findAlreadyExists = await this.booksRepository.findById(id);
 
     if (!findAlreadyExists) {
       throw new HttpException("Livro não encontrado com [id] informado!", 404);
     }
 
-    await this.booksRepository.delete(id);
+    await this.booksRepository.delete(findAlreadyExists, id);
   }
 }
 

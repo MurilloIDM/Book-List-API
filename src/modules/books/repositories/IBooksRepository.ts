@@ -11,7 +11,7 @@ interface IBooksRepository {
   ): Promise<Books>;
   findById(id: string): Promise<Books>;
   findAll(): Promise<Books[]>;
-  delete(id: string): Promise<void>;
+  delete(book: Books, id: string): Promise<void>;
 }
 
 export { IBooksRepository };

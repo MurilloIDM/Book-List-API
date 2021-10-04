@@ -1,3 +1,4 @@
+import { forEach, get } from "lodash";
 import { getRepository, Repository } from "typeorm";
 
 import { IRequestBooks } from "../../dtos/IRequestBooks";
@@ -58,8 +59,22 @@ class BooksRepository implements IBooksRepository {
     return books;
   }
 
-  async delete(id: string): Promise<void> {
-    await this.repository.delete(id);
+  async delete(book: Books, id: string): Promise<void> {
+    const users = get(book, "users", []);
+
+    forEach(users, async (user) => {
+      await this.repository
+        .createQueryBuilder("books")
+        .relation("users")
+        .of(id)
+        .remove(user.id);
+    });
+
+    await this.repository
+      .createQueryBuilder("books")
+      .delete()
+      .where("id = :id", { id })
+      .execute();
   }
 }
 
