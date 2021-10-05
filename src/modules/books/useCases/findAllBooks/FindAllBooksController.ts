@@ -11,7 +11,9 @@ class FindAllBooksController {
   ): Promise<Response<Books[]>> {
     const findAllBooksUseCase = container.resolve(FindAllBooksUseCase);
 
-    return response.json(findAllBooksUseCase);
+    const books = await findAllBooksUseCase.execute();
+
+    return response.json(books);
   }
 }
 

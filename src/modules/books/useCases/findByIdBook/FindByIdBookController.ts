@@ -17,7 +17,7 @@ class FindByIdBookController {
 
     const findByIdBookUseCase = container.resolve(FindByIdBookUseCase);
 
-    const book = findByIdBookUseCase.execute(id);
+    const book = await findByIdBookUseCase.execute(id);
 
     return response.json(book);
   }

@@ -24,6 +24,7 @@ class BooksRepository implements IBooksRepository {
       totalPages,
       publishingCompany,
     });
+
     await this.repository.save(book);
   }
 
@@ -39,12 +40,12 @@ class BooksRepository implements IBooksRepository {
     author: string,
     company: string
   ): Promise<Books> {
-    const book = this.repository
+    const book = await this.repository
       .createQueryBuilder("books")
-      .where("name = :name", { name })
-      .andWhere("author = :author", { author })
-      .andWhere("publishingCompany = :company", { company })
-      .execute();
+      .where("books.name = :name", { name })
+      .andWhere("books.author = :author", { author })
+      .andWhere("books.publishingCompany = :company", { company })
+      .getOne();
 
     return book;
   }
@@ -55,7 +56,7 @@ class BooksRepository implements IBooksRepository {
   }
 
   async findAll(): Promise<Books[]> {
-    const books = this.repository.find();
+    const books = await this.repository.find();
     return books;
   }
 

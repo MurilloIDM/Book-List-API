@@ -12,7 +12,7 @@ class FindByIdBookUseCase {
   ) {}
 
   async execute(id: string): Promise<Books> {
-    const bookAlreadyExists = this.booksRepository.findById(id);
+    const bookAlreadyExists = await this.booksRepository.findById(id);
 
     if (!bookAlreadyExists) {
       throw new HttpException("Livro não encontrado com ID informado!", 404);
