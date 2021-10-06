@@ -1,0 +1,3 @@
+class AddReadBookController {}
+
+export { AddReadBookController };

@@ -1,3 +1,4 @@
+import { IRequestAddBooks } from "../dtos/IRequestAddBooks";
 import { IRequestUsers } from "../dtos/IRequestUsers";
 import { Users } from "../entities/Users";
 
@@ -8,6 +9,7 @@ interface IUsersRepository {
   findByEmail(email: string): Promise<Users>;
   delete(id: string, user: Users): Promise<void>;
   findAll(): Promise<Users[]>;
+  addBooks(data: IRequestAddBooks): Promise<void>;
 }
 
 export { IUsersRepository };

@@ -1,6 +1,7 @@
 import { forEach, get } from "lodash";
 import { getRepository, Repository } from "typeorm";
 
+import { IRequestAddBooks } from "../../dtos/IRequestAddBooks";
 import { IRequestUsers } from "../../dtos/IRequestUsers";
 import { Users } from "../../entities/Users";
 import { IUsersRepository } from "../IUsersRepository";
@@ -80,6 +81,18 @@ class UsersRepository implements IUsersRepository {
       .getMany();
 
     return users;
+  }
+
+  async addBooks({
+    idUser,
+    idBook,
+    relation,
+  }: IRequestAddBooks): Promise<void> {
+    await this.repository
+      .createQueryBuilder("users")
+      .relation(Users, relation)
+      .of(idUser)
+      .add(idBook);
   }
 }
 
