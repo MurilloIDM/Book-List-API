@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { check } from "express-validator";
+import { check, param } from "express-validator";
 
+import { AddReadBookController } from "../modules/users/useCases/addReadBooks/AddReadBookController";
 import { CreateUserController } from "../modules/users/useCases/createUser/CreateUserController";
 import { DeleteUserController } from "../modules/users/useCases/deleteUser/DeleteUserController";
 import { FindAllUsersController } from "../modules/users/useCases/findAllUsers/FIndAllUsersController";
@@ -14,6 +15,7 @@ const findAllUsersController = new FindAllUsersController();
 const findByIdUserController = new FindByIdUserController();
 const deleteUserController = new DeleteUserController();
 const updateUserController = new UpdateUserController();
+const addReadBookController = new AddReadBookController();
 
 usersRouter.post(
   "/",
@@ -26,10 +28,31 @@ usersRouter.post(
 
 usersRouter.get("/", findAllUsersController.handle);
 
-usersRouter.get("/:id", findByIdUserController.handle);
+usersRouter.get(
+  "/:id",
+  param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
+  findByIdUserController.handle
+);
 
-usersRouter.delete("/:id", deleteUserController.handle);
+usersRouter.delete(
+  "/:id",
+  param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
+  deleteUserController.handle
+);
 
-usersRouter.put("/:id", updateUserController.handle);
+usersRouter.put(
+  "/:id",
+  param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
+  updateUserController.handle
+);
+
+usersRouter.post(
+  "/readBooks/:id",
+  check("idsBooks")
+    .isArray({ min: 1 })
+    .withMessage("A lista de livros não pode estar vazia!"),
+  param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
+  addReadBookController.handle
+);
 
 export { usersRouter };

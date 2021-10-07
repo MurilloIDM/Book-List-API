@@ -20,7 +20,6 @@ class CreateUserUseCase {
     const userAlreadyExists = await this.usersRepository.findByEmail(email);
 
     if (userAlreadyExists) {
-      console.log("caiu aqui");
       throw new HttpException(
         "Já existe usuário cadastro com e-mail informado"
       );
