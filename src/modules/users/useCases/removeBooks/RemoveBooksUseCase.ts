@@ -1,16 +1,15 @@
 import { get, map, size, some } from "lodash";
-import { inject, injectable } from "tsyringe";
+import { inject } from "tsyringe";
 
 import { HttpException } from "../../../../errors/HttpException";
 import { IBooksRepository } from "../../../books/repositories/IBooksRepository";
 import {
-  IResponseAddBook,
-  IStatusObjectAddBook,
-} from "../../dtos/IResponseAddBooks";
+  IResponseRemoveBook,
+  IStatusObjectRemoveBook,
+} from "../../dtos/IResponseRemoveBooks";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
-@injectable()
-class AddBooksInterestUseCase {
+class RemoveBooksUseCase {
   constructor(
     @inject("UsersRepository")
     private usersRepository: IUsersRepository,
@@ -18,9 +17,13 @@ class AddBooksInterestUseCase {
     private booksRepository: IBooksRepository
   ) {}
 
-  async execute(data: string[], idUser: string): Promise<IResponseAddBook> {
-    const success: IStatusObjectAddBook[] = [];
-    const errors: IStatusObjectAddBook[] = [];
+  async execute(
+    data: string[],
+    idUser: string,
+    relation: string
+  ): Promise<IResponseRemoveBook> {
+    const success: IStatusObjectRemoveBook[] = [];
+    const errors: IStatusObjectRemoveBook[] = [];
 
     const userAlreadyExists = await this.usersRepository.findById(idUser);
 
@@ -28,7 +31,7 @@ class AddBooksInterestUseCase {
       throw new HttpException("Usuário não encontrado com [id] informado!");
     }
 
-    const booksInterest = get(userAlreadyExists, "booksInterest", []);
+    const books = get(userAlreadyExists, relation, []);
 
     await Promise.all(
       map(data, async (idBook) => {
@@ -42,26 +45,23 @@ class AddBooksInterestUseCase {
           return;
         }
 
-        const bookAlreadyExistsInUser = some(
-          booksInterest,
-          ({ id }) => id === idBook
-        );
+        const bookAlreadyExistsInUser = some(books, ({ id }) => id === idBook);
 
-        if (bookAlreadyExistsInUser) {
+        if (!bookAlreadyExistsInUser) {
           errors.push({
             idBook,
-            message: "Livro já foi adicionado anteriormente!",
+            message: "Livro não encontrado na lista!",
           });
           return;
         }
 
-        await this.usersRepository.addBooks({
+        await this.usersRepository.removeBooks({
           idUser,
           idBook,
-          relation: "booksInterest",
+          relation,
         });
 
-        success.push({ idBook, message: "Livro adicionado com sucesso!" });
+        success.push({ idBook, message: "Livro removido com sucesso!" });
       })
     );
 
@@ -69,8 +69,8 @@ class AddBooksInterestUseCase {
       success,
       errors,
       totalAddBooks: size(data),
-    } as IResponseAddBook;
+    } as IResponseRemoveBook;
   }
 }
 
-export { AddBooksInterestUseCase };
+export { RemoveBooksUseCase };

@@ -7,6 +7,7 @@ import { CreateUserController } from "../modules/users/useCases/createUser/Creat
 import { DeleteUserController } from "../modules/users/useCases/deleteUser/DeleteUserController";
 import { FindAllUsersController } from "../modules/users/useCases/findAllUsers/FIndAllUsersController";
 import { FindByIdUserController } from "../modules/users/useCases/findById/FindByIdUserController";
+import { RemoveBooksController } from "../modules/users/useCases/removeBooks/RemoveBooksController";
 import { UpdateUserController } from "../modules/users/useCases/updateUser/UpdateUserController";
 
 const usersRouter = Router();
@@ -18,6 +19,7 @@ const deleteUserController = new DeleteUserController();
 const updateUserController = new UpdateUserController();
 const addReadBookController = new AddReadBookController();
 const addBooksInterestController = new AddBooksInterestController();
+const removeBooksController = new RemoveBooksController();
 
 usersRouter.post(
   "/",
@@ -64,6 +66,19 @@ usersRouter.post(
     .withMessage("A lista de livros não pode estar vazia!"),
   param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
   addBooksInterestController.handle
+);
+
+usersRouter.delete(
+  "/:relation/:id",
+  check("idsBooks")
+    .isArray({ min: 1 })
+    .withMessage("A lista de livros não pode estar vazia!"),
+  param("relation")
+    .isString()
+    .notEmpty()
+    .withMessage("Deve ser especificado uma lista de livros!"),
+  param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
+  removeBooksController.handle
 );
 
 export { usersRouter };

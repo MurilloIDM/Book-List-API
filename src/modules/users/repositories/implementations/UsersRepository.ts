@@ -2,6 +2,7 @@ import { forEach, get } from "lodash";
 import { getRepository, Repository } from "typeorm";
 
 import { IRequestAddBooks } from "../../dtos/IRequestAddBooks";
+import { IRequestRemoveBooks } from "../../dtos/IRequestRemoveBooks";
 import { IRequestUsers } from "../../dtos/IRequestUsers";
 import { Users } from "../../entities/Users";
 import { IUsersRepository } from "../IUsersRepository";
@@ -93,6 +94,18 @@ class UsersRepository implements IUsersRepository {
       .relation(Users, relation)
       .of(idUser)
       .add(idBook);
+  }
+
+  async removeBooks({
+    idUser,
+    idBook,
+    relation,
+  }: IRequestRemoveBooks): Promise<void> {
+    await this.repository
+      .createQueryBuilder("users")
+      .relation(Users, relation)
+      .of(idUser)
+      .remove(idBook);
   }
 }
 
