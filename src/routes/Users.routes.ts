@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { check, param } from "express-validator";
 
+import { AddBooksInterestController } from "../modules/users/useCases/addBooksInterest/AddBooksInterestController";
 import { AddReadBookController } from "../modules/users/useCases/addReadBooks/AddReadBookController";
 import { CreateUserController } from "../modules/users/useCases/createUser/CreateUserController";
 import { DeleteUserController } from "../modules/users/useCases/deleteUser/DeleteUserController";
@@ -16,6 +17,7 @@ const findByIdUserController = new FindByIdUserController();
 const deleteUserController = new DeleteUserController();
 const updateUserController = new UpdateUserController();
 const addReadBookController = new AddReadBookController();
+const addBooksInterestController = new AddBooksInterestController();
 
 usersRouter.post(
   "/",
@@ -53,6 +55,15 @@ usersRouter.post(
     .withMessage("A lista de livros não pode estar vazia!"),
   param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
   addReadBookController.handle
+);
+
+usersRouter.post(
+  "/booksInterest/:id",
+  check("idsBooks")
+    .isArray({ min: 1 })
+    .withMessage("A lista de livros não pode estar vazia!"),
+  param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
+  addBooksInterestController.handle
 );
 
 export { usersRouter };
