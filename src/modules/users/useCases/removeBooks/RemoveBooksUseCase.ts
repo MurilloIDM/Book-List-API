@@ -1,5 +1,5 @@
 import { get, map, size, some } from "lodash";
-import { inject } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 
 import { HttpException } from "../../../../errors/HttpException";
 import { IBooksRepository } from "../../../books/repositories/IBooksRepository";
@@ -9,6 +9,7 @@ import {
 } from "../../dtos/IResponseRemoveBooks";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
 
+@injectable()
 class RemoveBooksUseCase {
   constructor(
     @inject("UsersRepository")
