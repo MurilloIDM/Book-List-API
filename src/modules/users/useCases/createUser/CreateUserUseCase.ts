@@ -1,3 +1,4 @@
+import { hash } from "bcrypt";
 import { inject, injectable } from "tsyringe";
 
 import { HttpException } from "../../../../errors/HttpException";
@@ -21,11 +22,18 @@ class CreateUserUseCase {
 
     if (userAlreadyExists) {
       throw new HttpException(
-        "Já existe usuário cadastro com e-mail informado"
+        "Já existe usuário cadastro com e-mail informado!"
       );
     }
 
-    await this.usersRepository.create({ name, email, password, birthDate });
+    const encryptedPassword = await hash(password, 8);
+
+    await this.usersRepository.create({
+      name,
+      email,
+      password: encryptedPassword,
+      birthDate,
+    });
   }
 }
 
