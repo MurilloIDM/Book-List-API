@@ -19,8 +19,15 @@ class UsersRepository implements IUsersRepository {
     email,
     password,
     birthDate,
+    avatar,
   }: IRequestUsers): Promise<void> {
-    const entity = this.repository.create({ name, email, password, birthDate });
+    const entity = this.repository.create({
+      name,
+      email,
+      password,
+      birthDate,
+      avatar,
+    });
     await this.repository.save(entity);
   }
 

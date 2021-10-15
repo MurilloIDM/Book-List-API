@@ -17,9 +17,10 @@ class UpdateUserAvatarUseCase {
       await deleteFile(`./tmp/avatar/${user.avatar}`);
     }
 
-    user.avatar = avatarFile;
+    const userUpdated = { ...user };
+    userUpdated.avatar = avatarFile;
 
-    await this.usersRepository.create(user);
+    await this.usersRepository.update(userUpdated, user);
   }
 }
 

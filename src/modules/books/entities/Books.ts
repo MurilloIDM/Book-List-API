@@ -29,6 +29,9 @@ class Books {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column()
+  bookCover: string;
+
   @ManyToMany(() => Users)
   users: Users[];
 
