@@ -30,6 +30,9 @@ class Users {
   @Column({ type: "date" })
   birthDate: string;
 
+  @Column()
+  avatar: string;
+
   @ManyToMany(() => Books)
   @JoinTable()
   readBooks: Books[];

@@ -6,7 +6,7 @@ export class addColumnUploadImages1634293269237 implements MigrationInterface {
       "users",
       new TableColumn({
         name: "avatar",
-        type: "string",
+        type: "varchar",
         isNullable: true,
       })
     );
@@ -15,7 +15,7 @@ export class addColumnUploadImages1634293269237 implements MigrationInterface {
       "books",
       new TableColumn({
         name: "bookCover",
-        type: "string",
+        type: "varchar",
         isNullable: true,
       })
     );

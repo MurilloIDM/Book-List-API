@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { check, param } from "express-validator";
+import multer from "multer";
 
+import uploadConfig from "../config/upload";
 import { AddBooksInterestController } from "../modules/users/useCases/addBooksInterest/AddBooksInterestController";
 import { AddReadBookController } from "../modules/users/useCases/addReadBooks/AddReadBookController";
 import { CreateUserController } from "../modules/users/useCases/createUser/CreateUserController";
@@ -9,8 +11,11 @@ import { FindAllUsersController } from "../modules/users/useCases/findAllUsers/F
 import { FindByIdUserController } from "../modules/users/useCases/findById/FindByIdUserController";
 import { RemoveBooksController } from "../modules/users/useCases/removeBooks/RemoveBooksController";
 import { UpdateUserController } from "../modules/users/useCases/updateUser/UpdateUserController";
+import { UpdateUserAvatarController } from "../modules/users/useCases/updateUserAvatar/UpdateUserAvatarController";
 
 const usersRouter = Router();
+
+const uploadAvatar = multer(uploadConfig.upload("./tmp/avatar"));
 
 const createUserController = new CreateUserController();
 const findAllUsersController = new FindAllUsersController();
@@ -20,6 +25,7 @@ const updateUserController = new UpdateUserController();
 const addReadBookController = new AddReadBookController();
 const addBooksInterestController = new AddBooksInterestController();
 const removeBooksController = new RemoveBooksController();
+const updateUserAvatarController = new UpdateUserAvatarController();
 
 usersRouter.post(
   "/",
@@ -79,6 +85,13 @@ usersRouter.delete(
     .withMessage("Deve ser especificado uma lista de livros!"),
   param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
   removeBooksController.handle
+);
+
+usersRouter.patch(
+  "/avatar/:id",
+  param("id").isUUID("4").withMessage("ID informado possui formato inválido!"),
+  uploadAvatar.single("avatar"),
+  updateUserAvatarController.handle
 );
 
 export { usersRouter };
